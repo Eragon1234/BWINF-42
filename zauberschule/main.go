@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BWINF/pkg/slice"
 	"bufio"
 	"fmt"
 	"os"
@@ -27,8 +28,16 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
+	scanner.Scan()
+
+	var n, m int
+	_, err = fmt.Sscanf(scanner.Text(), "%d %d", &n, &m)
+	if err != nil {
+		panic(err)
+	}
+
+	plan := [2][][]bool{
+		slice.New2D[bool](n, m),
+		slice.New2D[bool](n, m),
 	}
 }
