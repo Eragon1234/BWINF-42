@@ -1,6 +1,7 @@
 package floorplan
 
 import (
+	"BWINF/zauberschule/coordinate"
 	"bufio"
 	"fmt"
 	"io"
@@ -34,9 +35,9 @@ func parseFloor(scanner *bufio.Scanner, n int, plan *Floorplan, floor int) {
 		scanner.Scan()
 		for j, c := range scanner.Text() {
 			if c == 'A' {
-				plan.Start = [3]int{floor, i, j}
+				plan.Start = coordinate.New(floor, i, j)
 			} else if c == 'B' {
-				plan.End = [3]int{floor, i, j}
+				plan.End = coordinate.New(floor, i, j)
 			}
 			plan.Plan[floor][i][j] = c != '#'
 		}

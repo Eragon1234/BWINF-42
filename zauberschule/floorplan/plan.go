@@ -2,10 +2,11 @@ package floorplan
 
 import (
 	"BWINF/pkg/slice"
+	"BWINF/zauberschule/coordinate"
 )
 
 type Floorplan struct {
-	Start, End [3]int
+	Start, End coordinate.Coordinate
 	Plan       [2][][]bool
 }
 
