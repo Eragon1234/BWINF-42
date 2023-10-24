@@ -18,3 +18,11 @@ func New(n, m int) *Floorplan {
 		},
 	}
 }
+
+func (f *Floorplan) Get(c coordinate.Coordinate) bool {
+	return f.Plan[c.Floor][c.Y][c.X]
+}
+
+func (f *Floorplan) Set(c coordinate.Coordinate, b bool) {
+	f.Plan[c.Floor][c.Y][c.X] = b
+}
