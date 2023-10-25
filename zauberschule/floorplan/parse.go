@@ -31,15 +31,17 @@ func Parse(reader io.Reader) (*Floorplan, error) {
 }
 
 func parseFloor(scanner *bufio.Scanner, n int, plan *Floorplan, floor int) {
-	for i := 0; i < n; i++ {
+	for y := 0; y < n; y++ {
 		scanner.Scan()
-		for j, c := range scanner.Text() {
+		for x, c := range scanner.Text() {
+			pos := coordinate.New(floor, x, y)
+
 			if c == 'A' {
-				plan.Start = coordinate.New(floor, i, j)
+				plan.Start = pos
 			} else if c == 'B' {
-				plan.End = coordinate.New(floor, i, j)
+				plan.End = pos
 			}
-			plan.Plan[floor][i][j] = c != '#'
+			plan.Set(pos, c != '#')
 		}
 	}
 }
