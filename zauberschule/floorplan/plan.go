@@ -19,7 +19,16 @@ func New(n, m int) *Floorplan {
 	}
 }
 
+func (f *Floorplan) IsValid(c coordinate.Coordinate) bool {
+	return c.Floor >= 0 && c.Floor < len(f.Plan) &&
+		c.Y >= 0 && c.Y < len(f.Plan[c.Floor]) &&
+		c.X >= 0 && c.X < len(f.Plan[c.Floor][c.Y])
+}
+
 func (f *Floorplan) Get(c coordinate.Coordinate) bool {
+	if !f.IsValid(c) {
+		return false
+	}
 	return f.Plan[c.Floor][c.Y][c.X]
 }
 
