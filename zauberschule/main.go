@@ -30,19 +30,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(plan.Start, plan.End)
+	path := floorplan.FindPath(plan)
 
-	for _, s := range plan.Plan {
-		for _, row := range s {
-			for _, c := range row {
-				if c {
-					fmt.Print(".")
-				} else {
-					fmt.Print("#")
-				}
-			}
-			fmt.Println()
-		}
-		fmt.Println()
-	}
+	fmt.Println(path)
 }
