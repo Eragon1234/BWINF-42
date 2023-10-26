@@ -35,3 +35,15 @@ func (f *Floorplan) Get(c coordinate.Coordinate) bool {
 func (f *Floorplan) Set(c coordinate.Coordinate, b bool) {
 	f.Plan[c.Floor][c.Y][c.X] = b
 }
+
+func (f *Floorplan) Neighbors(c coordinate.Coordinate) []Neighbor {
+	var neighbors []Neighbor
+
+	for _, neighbor := range Neighbors(c) {
+		if f.Get(neighbor.Coordinate) {
+			neighbors = append(neighbors, neighbor)
+		}
+	}
+
+	return neighbors
+}
