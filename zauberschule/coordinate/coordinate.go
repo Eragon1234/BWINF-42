@@ -12,3 +12,11 @@ func New(floor, x, y int) Coordinate {
 		Y:     y,
 	}
 }
+
+func (c Coordinate) Add(other Coordinate) Coordinate {
+	return Coordinate{
+		Floor: c.Floor + other.Floor,
+		X:     c.X + other.X,
+		Y:     c.Y + other.Y,
+	}
+}
