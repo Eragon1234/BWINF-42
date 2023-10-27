@@ -13,6 +13,15 @@ func New(floor, x, y int) Coordinate {
 	}
 }
 
+var (
+	Up        = New(0, 0, 1)
+	Down      = New(0, 0, -1)
+	Left      = New(0, -1, 0)
+	Right     = New(0, 1, 0)
+	FloorUp   = New(1, 0, 0)
+	FloorDown = New(-1, 0, 0)
+)
+
 func (c Coordinate) Add(other Coordinate) Coordinate {
 	return Coordinate{
 		Floor: c.Floor + other.Floor,
