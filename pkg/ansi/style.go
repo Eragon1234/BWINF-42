@@ -2,16 +2,19 @@ package ansi
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Style string
 
 func (s Style) Add(others ...Style) Style {
-	if len(others) == 0 {
-		return s
+	var sb strings.Builder
+	sb.WriteString(string(s))
+	for _, other := range others {
+		sb.WriteRune(';')
+		sb.WriteString(string(other))
 	}
-	otherStyling := others[0].Add(others[1:]...)
-	return Style(fmt.Sprintf("%s;%s", s, otherStyling))
+	return Style(fmt.Sprintf("%s;%s", s, sb.String()))
 }
 
 const Reset = "\033[0m"
@@ -37,11 +40,10 @@ const (
 	Underline     Style = "4"
 )
 
+const emptyStyle = Style("")
+
 func StyleString(s string, styles ...Style) string {
-	if len(styles) == 0 {
-		return s
-	}
-	styling := styles[0].Add(styles[1:]...)
+	styling := emptyStyle.Add(styles...)
 	return fmt.Sprintf("\033[%sm%s%s", styling, s, Reset)
 }
 
