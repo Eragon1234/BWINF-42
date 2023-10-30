@@ -1,14 +1,15 @@
-package floorplan
+package path
 
 import (
 	"BWINF/pkg/heap"
 	"BWINF/zauberschule/coordinate"
+	"BWINF/zauberschule/floorplan"
 	"slices"
 )
 
 type Path []coordinate.Coordinate
 
-func FindPath(plan *Floorplan) *Path {
+func FindPath(plan *floorplan.Floorplan) *Path {
 	distances := make(map[coordinate.Coordinate]int)
 	previous := make(map[coordinate.Coordinate]coordinate.Coordinate)
 
