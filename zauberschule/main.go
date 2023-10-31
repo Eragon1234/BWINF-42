@@ -2,6 +2,8 @@ package main
 
 import (
 	"BWINF/zauberschule/floorplan"
+	"BWINF/zauberschule/path"
+	"BWINF/zauberschule/route"
 	"fmt"
 	"os"
 )
@@ -30,7 +32,7 @@ func main() {
 		panic(err)
 	}
 
-	path := floorplan.FindPath(plan)
+	p := path.FindPath(plan)
 
-	fmt.Println(path)
+	fmt.Println(route.StringFloorplanWithPath(*plan, *p))
 }
