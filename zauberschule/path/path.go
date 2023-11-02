@@ -9,7 +9,7 @@ import (
 
 type Path []coordinate.Coordinate
 
-func FindPath(plan *floorplan.Floorplan) *Path {
+func FindPath(plan *floorplan.Floorplan) (*Path, int) {
 	distances := make(map[coordinate.Coordinate]int)
 	previous := make(map[coordinate.Coordinate]coordinate.Coordinate)
 
@@ -36,7 +36,7 @@ func FindPath(plan *floorplan.Floorplan) *Path {
 		}
 	}
 
-	return buildPath(plan.Start, plan.End, previous)
+	return buildPath(plan.Start, plan.End, previous), distances[plan.End]
 }
 
 func buildPath(start, end coordinate.Coordinate, previous map[coordinate.Coordinate]coordinate.Coordinate) *Path {

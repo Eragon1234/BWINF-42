@@ -32,7 +32,9 @@ func main() {
 		panic(err)
 	}
 
-	p := path.FindPath(plan)
+	p, distance := path.FindPath(plan)
 
 	fmt.Println(route.StringFloorplanWithPath(*plan, *p))
+
+	fmt.Println("Distance: ", distance)
 }
