@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image/png"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 		panic(err)
 	}
 
-	var result string
+	var sb strings.Builder
 
 	bounds := img.Bounds()
 
@@ -49,12 +50,13 @@ func main() {
 		for y >= bounds.Max.Y {
 			y -= bounds.Max.Y
 		}
-		result += string(r)
+
+		sb.WriteRune(rune(r))
 
 		if g == 0 && b == 0 {
 			break
 		}
 	}
 
-	fmt.Println(result)
+	fmt.Println(sb.String())
 }
