@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"image/png"
+	"image"
 	"os"
 	"strings"
+
+	_ "image/jpeg"
+	_ "image/png"
 )
 
 func main() {
@@ -26,7 +29,7 @@ func main() {
 		}
 	}(file)
 
-	img, err := png.Decode(file)
+	img, _, err := image.Decode(file)
 	if err != nil {
 		panic(err)
 	}
