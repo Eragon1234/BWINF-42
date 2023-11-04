@@ -101,7 +101,7 @@ var (
 )
 
 func writeFloor(sb *strings.Builder, f plan.Plan, path *[]printPath, floor int, colors map[coordinate.Coordinate]ansi.Style) {
-	for y, row := range f.Plan[floor] {
+	for y, row := range f.Walkable[floor] {
 		for x, node := range row {
 			c := coordinate.New(floor, x, y)
 
