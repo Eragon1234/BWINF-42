@@ -1,4 +1,4 @@
-package floorplan
+package plan
 
 import (
 	"BWINF/zauberschule/coordinate"
@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-func Parse(reader io.Reader) (*Floorplan, error) {
+func Parse(reader io.Reader) (*Plan, error) {
 	scanner := bufio.NewScanner(reader)
 
 	scanner.Scan()
@@ -30,7 +30,7 @@ func Parse(reader io.Reader) (*Floorplan, error) {
 	return plan, nil
 }
 
-func parseFloor(scanner *bufio.Scanner, n int, plan *Floorplan, floor int) {
+func parseFloor(scanner *bufio.Scanner, n int, plan *Plan, floor int) {
 	for y := 0; y < n; y++ {
 		scanner.Scan()
 		for x, c := range scanner.Text() {

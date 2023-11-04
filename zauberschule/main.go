@@ -1,8 +1,8 @@
 package main
 
 import (
-	"BWINF/zauberschule/floorplan"
 	"BWINF/zauberschule/path"
+	"BWINF/zauberschule/plan"
 	"BWINF/zauberschule/route"
 	"fmt"
 	"os"
@@ -27,14 +27,14 @@ func main() {
 		}
 	}(file)
 
-	plan, err := floorplan.Parse(file)
+	p, err := plan.Parse(file)
 	if err != nil {
 		panic(err)
 	}
 
-	p, distance := path.FindPath(plan)
+	shortestPath, distance := path.FindPath(p)
 
-	fmt.Println(route.StringFloorplanWithPath(*plan, *p))
+	fmt.Println(route.StringFloorplanWithPath(*p, *shortestPath))
 
 	fmt.Println("Distance: ", distance)
 }

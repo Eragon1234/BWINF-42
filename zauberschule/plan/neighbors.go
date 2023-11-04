@@ -1,4 +1,4 @@
-package floorplan
+package plan
 
 import "BWINF/zauberschule/coordinate"
 

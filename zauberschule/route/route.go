@@ -3,8 +3,8 @@ package route
 import (
 	"BWINF/pkg/ansi"
 	"BWINF/zauberschule/coordinate"
-	"BWINF/zauberschule/floorplan"
 	"BWINF/zauberschule/path"
+	"BWINF/zauberschule/plan"
 	"slices"
 	"strings"
 )
@@ -23,7 +23,7 @@ type printPath struct {
 	Symbol     string
 }
 
-func StringFloorplanWithPath(f floorplan.Floorplan, path path.Path) string {
+func StringFloorplanWithPath(f plan.Plan, path path.Path) string {
 	styles := make(map[coordinate.Coordinate]ansi.Style)
 
 	p := constructStepsAndColors(path, f, styles)
@@ -37,7 +37,7 @@ func StringFloorplanWithPath(f floorplan.Floorplan, path path.Path) string {
 	return sb.String()
 }
 
-func constructStepsAndColors(p path.Path, f floorplan.Floorplan, styles map[coordinate.Coordinate]ansi.Style) []printPath {
+func constructStepsAndColors(p path.Path, f plan.Plan, styles map[coordinate.Coordinate]ansi.Style) []printPath {
 	possibleColors := []ansi.Style{
 		ansi.Red,
 		ansi.Green,
@@ -100,7 +100,7 @@ var (
 	wall       = ansi.S("#", ansi.RGB(130, 130, 130))
 )
 
-func writeFloor(sb *strings.Builder, f floorplan.Floorplan, path *[]printPath, floor int, colors map[coordinate.Coordinate]ansi.Style) {
+func writeFloor(sb *strings.Builder, f plan.Plan, path *[]printPath, floor int, colors map[coordinate.Coordinate]ansi.Style) {
 	for y, row := range f.Plan[floor] {
 		for x, node := range row {
 			c := coordinate.New(floor, x, y)
