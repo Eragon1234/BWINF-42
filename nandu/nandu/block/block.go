@@ -21,6 +21,11 @@ func (b *Block) I() bool {
 }
 
 func (b *Block) Set(i bool) {
+	// Only refresh if the input has changed
+	if b.i == i {
+		return
+	}
+
 	b.i = i
 
 	b.Refresh()
