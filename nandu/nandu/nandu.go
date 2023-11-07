@@ -74,5 +74,12 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 		}
 	}
 
+	// Initialize all blocks
+	for _, row := range nandu.Blocks {
+		for _, b := range row {
+			b.Refresh()
+		}
+	}
+
 	return nandu, nil
 }
