@@ -28,11 +28,18 @@ func main() {
 		panic(err)
 	}
 
-	for _, input := range n.Inputs {
-		input.Set(true)
-	}
+	for x := 0; x < 1<<len(n.Inputs); x++ {
+		for i, input := range n.Inputs {
+			value := (x>>i)&1 == 1
+			fmt.Printf("Q%v: %v\n", i+1, value)
 
-	for _, output := range n.Outputs {
-		fmt.Println(output.O)
+			input.Set(value)
+		}
+
+		for i, output := range n.Outputs {
+			fmt.Printf("L%v: %v\n", i+1, output.O)
+		}
+
+		fmt.Println()
 	}
 }
