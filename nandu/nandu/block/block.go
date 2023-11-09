@@ -5,27 +5,17 @@ type Block struct {
 	O bool
 
 	operation func(i1, i2 bool) bool
-	SetOutput func(o bool)
 	partner   *Block
+	next      Node
 }
 
-func NewNoBlock() *Block {
+func NewBlock(operation func(i1, i2 bool) bool) *Block {
 	return &Block{
-		operation: NoBlock,
-		SetOutput: func(o bool) {},
+		operation: operation,
 	}
-}
-
-func (b *Block) I() bool {
-	return b.i
 }
 
 func (b *Block) Set(i bool) {
-	// Only refresh if the input has changed
-	if b.i == i {
-		return
-	}
-
 	b.i = i
 
 	b.Refresh()
@@ -57,11 +47,15 @@ func (b *Block) Refresh() {
 }
 
 func (b *Block) update() {
-	if b.partner == nil {
-		b.O = b.operation(b.i, false)
-	} else {
-		b.O = b.operation(b.i, b.partner.I())
-	}
+	b.O = b.operation(b.i, b.partner != nil && b.partner.i)
 
-	b.SetOutput(b.O)
+	b.next.Set(b.O)
+}
+
+func (b *Block) Next() Node {
+	return b.next
+}
+
+func (b *Block) SetNext(next Node) {
+	b.next = next
 }

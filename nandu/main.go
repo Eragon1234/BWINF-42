@@ -37,7 +37,7 @@ func main() {
 		}
 
 		for i, output := range n.Outputs {
-			fmt.Printf("L%v: %v\n", i+1, output.O)
+			fmt.Printf("L%v: %v\n", i+1, output.Value)
 		}
 
 		fmt.Println()
