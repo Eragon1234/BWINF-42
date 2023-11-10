@@ -41,10 +41,7 @@ func main() {
 	var x, y int
 
 	for {
-		r, g, b, _ := img.At(x, y).RGBA()
-		r >>= 8
-		g >>= 8
-		b >>= 8
+		r, g, b := GetRGB(img, x, y)
 		x += int(g)
 		y += int(b)
 		for x >= bounds.Max.X {
@@ -62,4 +59,12 @@ func main() {
 	}
 
 	fmt.Println(sb.String())
+}
+
+func GetRGB(img image.Image, x, y int) (r, g, b uint32) {
+	r, g, b, _ = img.At(x, y).RGBA()
+	r >>= 8
+	g >>= 8
+	b >>= 8
+	return
 }
