@@ -9,7 +9,7 @@ import (
 
 type Path []coordinate.Coordinate
 
-func FindPath(plan *plan.Plan) (*Path, int) {
+func FindPath(p *plan.Plan) (*Path, int) {
 	distances := make(map[coordinate.Coordinate]int)
 	previous := make(map[coordinate.Coordinate]coordinate.Coordinate)
 
@@ -17,16 +17,16 @@ func FindPath(plan *plan.Plan) (*Path, int) {
 		return distances[a] < distances[b]
 	})
 
-	distances[plan.Start] = 0
-	queue.Push(plan.Start)
+	distances[p.Start] = 0
+	queue.Push(p.Start)
 
 	for queue.Len() > 0 {
 		currentNode := queue.Pop()
-		if currentNode == plan.End {
+		if currentNode == p.End {
 			break
 		}
 
-		for _, neighbor := range plan.Neighbors(currentNode) {
+		for _, neighbor := range p.Neighbors(currentNode) {
 			newDistance := distances[currentNode] + neighbor.Distance
 			if currentDistance, ok := distances[neighbor.Coordinate]; !ok || newDistance < currentDistance {
 				distances[neighbor.Coordinate] = newDistance
@@ -36,7 +36,7 @@ func FindPath(plan *plan.Plan) (*Path, int) {
 		}
 	}
 
-	return buildPath(plan.Start, plan.End, previous), distances[plan.End]
+	return buildPath(p.Start, p.End, previous), distances[p.End]
 }
 
 func buildPath(start, end coordinate.Coordinate, previous map[coordinate.Coordinate]coordinate.Coordinate) *Path {

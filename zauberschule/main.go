@@ -14,9 +14,7 @@ func main() {
 		return
 	}
 
-	filepath := os.Args[1]
-
-	file, err := os.Open(filepath)
+	file, err := os.Open(os.Args[1])
 	if err != nil {
 		panic(err)
 	}

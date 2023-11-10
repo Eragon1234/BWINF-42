@@ -118,7 +118,6 @@ func writeFloor(sb *strings.Builder, f plan.Plan, path *[]printPath, floor int, 
 			color, ok := colors[c]
 			if ok {
 				s = ansi.S(s, color)
-			} else {
 			}
 
 			sb.WriteString(s)

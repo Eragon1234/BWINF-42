@@ -23,17 +23,9 @@ var (
 )
 
 func (c Coordinate) Add(other Coordinate) Coordinate {
-	return Coordinate{
-		Floor: c.Floor + other.Floor,
-		X:     c.X + other.X,
-		Y:     c.Y + other.Y,
-	}
+	return New(c.Floor+other.Floor, c.X+other.X, c.Y+other.Y)
 }
 
 func (c Coordinate) Sub(other Coordinate) Coordinate {
-	return Coordinate{
-		Floor: c.Floor - other.Floor,
-		X:     c.X - other.X,
-		Y:     c.Y - other.Y,
-	}
+	return New(c.Floor-other.Floor, c.X-other.X, c.Y-other.Y)
 }

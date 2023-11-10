@@ -28,10 +28,7 @@ func (f *Plan) IsValid(c coordinate.Coordinate) bool {
 // IsWalkable returns true if the coordinate is valid and walkable
 // (i.e., not a wall and not outside the map)
 func (f *Plan) IsWalkable(c coordinate.Coordinate) bool {
-	if !f.IsValid(c) {
-		return false
-	}
-	return f.Walkable[c.Floor][c.Y][c.X]
+	return f.IsValid(c) && f.Walkable[c.Floor][c.Y][c.X]
 }
 
 func (f *Plan) Set(c coordinate.Coordinate, b bool) {
