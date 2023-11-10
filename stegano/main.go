@@ -42,14 +42,12 @@ func main() {
 
 	for {
 		r, g, b := GetRGB(img, x, y)
+
 		x += int(g)
 		y += int(b)
-		for x >= bounds.Max.X {
-			x -= bounds.Max.X
-		}
-		for y >= bounds.Max.Y {
-			y -= bounds.Max.Y
-		}
+
+		x %= bounds.Max.X
+		y %= bounds.Max.Y
 
 		sb.WriteRune(rune(r))
 
