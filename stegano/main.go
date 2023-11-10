@@ -16,9 +16,7 @@ func main() {
 		return
 	}
 
-	filepath := os.Args[1]
-
-	file, err := os.Open(filepath)
+	file, err := os.Open(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
@@ -35,9 +33,7 @@ func main() {
 	}
 
 	var sb strings.Builder
-
 	bounds := img.Bounds()
-
 	var x, y int
 
 	for {
@@ -61,8 +57,5 @@ func main() {
 
 func GetRGB(img image.Image, x, y int) (r, g, b uint32) {
 	r, g, b, _ = img.At(x, y).RGBA()
-	r >>= 8
-	g >>= 8
-	b >>= 8
-	return
+	return r >> 8, g >> 8, b >> 8
 }
