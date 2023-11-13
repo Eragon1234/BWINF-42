@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BWINF/pkg/ansi"
 	"BWINF/zauberschule/path"
 	"BWINF/zauberschule/plan"
 	"BWINF/zauberschule/route"
@@ -33,6 +34,19 @@ func main() {
 	shortestPath, distance := path.FindPath(p)
 
 	fmt.Println(route.StringFloorplanWithPath(*p, *shortestPath))
+	fmt.Println("Legende:")
+	fmt.Println("Der Startpunkt ist", ansi.S("unterstrichen.", ansi.Underline))
+	fmt.Println("Der Endpunkt ist X.")
+	fmt.Println("Stockwerkwechsel sind farbkodiert.")
+	fmt.Println("Bewegungen sind mit Pfeilen dargestellt.")
+	fmt.Println()
 
-	fmt.Println("Distance: ", distance)
+	fmt.Println("Weg als Liste, Start nicht inkludiert:")
+	for _, step := range *shortestPath {
+		fmt.Printf("%+v\n", step)
+	}
+
+	fmt.Println()
+
+	fmt.Printf("Der kürzeste Weg braucht %d Sekunden.\n", distance)
 }
