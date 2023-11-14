@@ -1,5 +1,6 @@
 package heap
 
+// internalHeap is a wrapper around a slice implementing heap.Interface.
 type internalHeap struct {
 	s    []any
 	less func(any, any) bool
