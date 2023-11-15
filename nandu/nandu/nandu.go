@@ -8,8 +8,15 @@ import (
 )
 
 type Nandu struct {
-	Inputs  []*block.Input
-	Outputs []*block.Output
+	Inputs  []*block.Node
+	Outputs []*block.Node
+}
+
+var stringToType = map[string]func(i1, i2 bool) bool{
+	"W": block.WhiteBlock,
+	"B": block.BlueBlock,
+	"R": block.RedBlockSensor,
+	"r": block.RedBlockNonSensor,
 }
 
 func Parse(r io.Reader) (nandu *Nandu, err error) {
@@ -20,45 +27,37 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 
 	nandu = &Nandu{}
 
-	var openPartner *block.Block
-	var currentRow, lastRow []block.Node
+	var openPartner *block.Node
+	var currentRow, lastRow []*block.Node
 
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		for x, c := range strings.Fields(line) {
-			var b block.Node
+			var n *block.Node
 			switch c[0] {
 			case 'Q':
-				b = &block.Input{}
-				nandu.Inputs = append(nandu.Inputs, b.(*block.Input))
+				n = block.NewNode(&block.NoOp{}, c)
+				nandu.Inputs = append(nandu.Inputs, n)
 			case 'L':
-				b = &block.Output{}
-				nandu.Outputs = append(nandu.Outputs, b.(*block.Output))
-			case 'W':
-				b = block.NewBlock(block.WhiteBlock)
-			case 'B':
-				b = block.NewBlock(block.BlueBlock)
-			case 'R':
-				b = block.NewBlock(block.RedBlockSensor)
-			case 'r':
-				b = block.NewBlock(block.RedBlockNonSensor)
-			case 'X':
-				b = new(block.NoBlock)
-			}
-			currentRow = append(currentRow, b)
-
-			if lastRow != nil {
-				lastRow[x].SetNext(b)
-			}
-
-			if b, ok := b.(*block.Block); ok {
+				n = block.NewNode(&block.NoOp{}, c)
+				nandu.Outputs = append(nandu.Outputs, n)
+			case 'W', 'B', 'R', 'r':
+				b := block.NewBlock(stringToType[c])
+				n = block.NewNode(b, c)
 				if openPartner != nil {
-					openPartner.SetPartner(b)
+					connect(openPartner, n)
 					openPartner = nil
 				} else {
-					openPartner = b
+					openPartner = n
 				}
+			case 'X':
+				n = block.NewNode(&block.NoBlock{}, c)
+			}
+			currentRow = append(currentRow, n)
+
+			if lastRow != nil {
+				lastRow[x].Next = n
 			}
 		}
 
@@ -67,4 +66,14 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 	}
 
 	return nandu, nil
+}
+
+// connect connects two nodes
+// It expects that n1 and n2 contain a block
+func connect(n1 *block.Node, n2 *block.Node) {
+	n1.Op.(*block.Block).Partner = n2
+	n2.Op.(*block.Block).Partner = n1
+
+	n1.Dependencies = append(n1.Dependencies, n2)
+	n2.Dependencies = append(n2.Dependencies, n1)
 }
