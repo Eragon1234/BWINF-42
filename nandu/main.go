@@ -31,13 +31,13 @@ func main() {
 	for x := 0; x < 1<<len(n.Inputs); x++ {
 		for i, input := range n.Inputs {
 			value := (x>>i)&1 == 1
-			fmt.Printf("Q%v: %v\n", i+1, value)
+			fmt.Printf("%v: %v\n", input.Identifier, value)
 
 			input.Set(value)
 		}
 
-		for i, output := range n.Outputs {
-			fmt.Printf("L%v: %v\n", i+1, output.O)
+		for _, output := range n.Outputs {
+			fmt.Printf("%v: %v\n", output.Identifier, output.O)
 		}
 
 		fmt.Println()

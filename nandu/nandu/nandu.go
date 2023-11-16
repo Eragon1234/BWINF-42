@@ -34,30 +34,30 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 		line := scanner.Text()
 
 		for x, c := range strings.Fields(line) {
-			var n *block.Node
+			var newNode *block.Node
 			switch c[0] {
 			case 'Q':
-				n = block.NewNode(&block.NoOp{}, c)
-				nandu.Inputs = append(nandu.Inputs, n)
+				newNode = block.NewNode(&block.NoOp{}, c)
+				nandu.Inputs = append(nandu.Inputs, newNode)
 			case 'L':
-				n = block.NewNode(&block.NoOp{}, c)
-				nandu.Outputs = append(nandu.Outputs, n)
+				newNode = block.NewNode(&block.NoOp{}, c)
+				nandu.Outputs = append(nandu.Outputs, newNode)
 			case 'W', 'B', 'R', 'r':
 				b := block.NewBlock(stringToType[c])
-				n = block.NewNode(b, c)
+				newNode = block.NewNode(b, c)
 				if openPartner != nil {
-					connect(openPartner, n)
+					connect(openPartner, newNode)
 					openPartner = nil
 				} else {
-					openPartner = n
+					openPartner = newNode
 				}
 			case 'X':
-				n = block.NewNode(&block.NoBlock{}, c)
+				newNode = block.NewNode(&block.NoBlock{}, c)
 			}
-			currentRow = append(currentRow, n)
+			currentRow = append(currentRow, newNode)
 
 			if lastRow != nil {
-				lastRow[x].Next = n
+				lastRow[x].Next = newNode
 			}
 		}
 

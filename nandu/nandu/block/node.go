@@ -9,14 +9,14 @@ type Node struct {
 	I            bool
 	O            bool
 	Next         *Node
-	Ident        string
+	Identifier   string
 	Dependencies []*Node
 }
 
-func NewNode(operator Operator, ident string) *Node {
+func NewNode(operator Operator, identifier string) *Node {
 	return &Node{
-		Op:    operator,
-		Ident: ident,
+		Op:         operator,
+		Identifier: identifier,
 	}
 }
 
