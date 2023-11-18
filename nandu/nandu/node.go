@@ -1,21 +1,18 @@
-package block
+package nandu
 
-type Operator interface {
-	Operate(i bool) bool
-}
+type Operation func(i1, i2 bool) bool
 
 type Node struct {
-	Op         Operator
-	I          bool
-	O          bool
+	Operation  Operation
+	I, O       bool
 	Next       *Node
-	Identifier string
 	Partner    *Node
+	Identifier string
 }
 
-func NewNode(operator Operator, identifier string) *Node {
+func NewNode(operator Operation, identifier string) *Node {
 	return &Node{
-		Op:         operator,
+		Operation:  operator,
 		Identifier: identifier,
 	}
 }
@@ -33,7 +30,7 @@ func (n *Node) updatePartner() {
 }
 
 func (n *Node) Update() {
-	n.O = n.Op.Operate(n.I)
+	n.O = n.Operation(n.I, n.Partner != nil && n.Partner.I)
 	if n.Next != nil {
 		n.Next.Set(n.O)
 	}

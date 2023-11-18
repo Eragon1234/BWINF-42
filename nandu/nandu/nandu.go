@@ -1,22 +1,25 @@
 package nandu
 
 import (
-	"BWINF/nandu/nandu/block"
 	"bufio"
 	"io"
 	"strings"
 )
 
 type Nandu struct {
-	Inputs  []*block.Node
-	Outputs []*block.Node
+	Heads   []*Node
+	Inputs  []*Node
+	Outputs []*Node
 }
 
-var stringToType = map[string]func(i1, i2 bool) bool{
-	"W": block.WhiteBlock,
-	"B": block.BlueBlock,
-	"R": block.RedBlockSensor,
-	"r": block.RedBlockNonSensor,
+var byteToOperation = map[byte]Operation{
+	'W': WhiteBlock,
+	'B': BlueBlock,
+	'R': RedBlockSensor,
+	'r': RedBlockNonSensor,
+	'X': AlwaysFalse,
+	'Q': Passthrough,
+	'L': Passthrough,
 }
 
 func Parse(r io.Reader) (nandu *Nandu, err error) {
@@ -27,32 +30,30 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 
 	nandu = &Nandu{}
 
-	var openPartner *block.Node
-	var currentRow, lastRow []*block.Node
+	var lastRow []*Node
+	var openPartner *Node
 
 	for scanner.Scan() {
 		line := scanner.Text()
 
+		var currentRow []*Node
 		for x, c := range strings.Fields(line) {
-			var newNode *block.Node
+			newNode := NewNode(byteToOperation[c[0]], c)
+
 			switch c[0] {
 			case 'Q':
-				newNode = block.NewNode(&block.NoOp{}, c)
 				nandu.Inputs = append(nandu.Inputs, newNode)
 			case 'L':
-				newNode = block.NewNode(&block.NoOp{}, c)
 				nandu.Outputs = append(nandu.Outputs, newNode)
 			case 'W', 'B', 'R', 'r':
-				b := block.NewBlock(stringToType[c])
-				newNode = block.NewNode(b, c)
 				if openPartner != nil {
-					connect(openPartner, newNode)
+					newNode.Partner = openPartner
+					openPartner.Partner = newNode
+
 					openPartner = nil
 				} else {
 					openPartner = newNode
 				}
-			case 'X':
-				newNode = block.NewNode(&block.NoBlock{}, c)
 			}
 			currentRow = append(currentRow, newNode)
 
@@ -62,18 +63,11 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 		}
 
 		lastRow = currentRow
-		currentRow = nil
+
+		if nandu.Heads == nil {
+			nandu.Heads = currentRow
+		}
 	}
 
 	return nandu, nil
-}
-
-// connect connects two nodes
-// It expects that n1 and n2 contain a block
-func connect(n1 *block.Node, n2 *block.Node) {
-	n1.Op.(*block.Block).Partner = n2
-	n2.Op.(*block.Block).Partner = n1
-
-	n1.Partner = n2
-	n2.Partner = n1
 }
