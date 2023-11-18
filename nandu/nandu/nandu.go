@@ -69,5 +69,9 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 		}
 	}
 
+	for _, input := range nandu.Inputs {
+		input.Set(false)
+	}
+
 	return nandu, nil
 }

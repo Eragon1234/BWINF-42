@@ -3,11 +3,12 @@ package nandu
 type Operation func(i1, i2 bool) bool
 
 type Node struct {
-	Operation  Operation
-	I, O       bool
-	Next       *Node
-	Partner    *Node
-	Identifier string
+	Operation   Operation
+	I, O        bool
+	Next        *Node
+	Partner     *Node
+	Identifier  string
+	initialized bool
 }
 
 func NewNode(operator Operation, identifier string) *Node {
@@ -18,6 +19,11 @@ func NewNode(operator Operation, identifier string) *Node {
 }
 
 func (n *Node) Set(i bool) {
+	if n.I == i && n.initialized {
+		return
+	}
+	n.initialized = true
+
 	n.I = i
 	n.Update()
 	n.updatePartner()
