@@ -74,6 +74,6 @@ func connect(n1 *block.Node, n2 *block.Node) {
 	n1.Op.(*block.Block).Partner = n2
 	n2.Op.(*block.Block).Partner = n1
 
-	n1.Dependencies = append(n1.Dependencies, n2)
-	n2.Dependencies = append(n2.Dependencies, n1)
+	n1.Partner = n2
+	n2.Partner = n1
 }

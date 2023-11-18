@@ -5,12 +5,12 @@ type Operator interface {
 }
 
 type Node struct {
-	Op           Operator
-	I            bool
-	O            bool
-	Next         *Node
-	Identifier   string
-	Dependencies []*Node
+	Op         Operator
+	I          bool
+	O          bool
+	Next       *Node
+	Identifier string
+	Partner    *Node
 }
 
 func NewNode(operator Operator, identifier string) *Node {
@@ -23,12 +23,12 @@ func NewNode(operator Operator, identifier string) *Node {
 func (n *Node) Set(i bool) {
 	n.I = i
 	n.Update()
-	n.updateDependencies()
+	n.updatePartner()
 }
 
-func (n *Node) updateDependencies() {
-	for _, dep := range n.Dependencies {
-		dep.Update()
+func (n *Node) updatePartner() {
+	if n.Partner != nil {
+		n.Partner.Update()
 	}
 }
 
