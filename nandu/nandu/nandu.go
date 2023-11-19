@@ -3,6 +3,7 @@ package nandu
 import (
 	"bufio"
 	"io"
+	"strconv"
 	"strings"
 )
 
@@ -10,6 +11,7 @@ type Nandu struct {
 	Heads   []*Node
 	Inputs  []*Node
 	Outputs []*Node
+	Blocks  map[string]*Node
 }
 
 var byteToOperation = map[byte]Operation{
@@ -28,7 +30,11 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 	// skip over width and height
 	scanner.Scan()
 
-	nandu = &Nandu{}
+	nandu = &Nandu{
+		Blocks: make(map[string]*Node),
+	}
+
+	var lastId int
 
 	var lastRow []*Node
 	var openPartner *Node
@@ -60,6 +66,13 @@ func Parse(r io.Reader) (nandu *Nandu, err error) {
 			if lastRow != nil {
 				lastRow[x].Next = newNode
 			}
+
+			if len(newNode.Identifier) == 1 {
+				lastId++
+				newNode.Identifier += strconv.Itoa(lastId)
+			}
+
+			nandu.Blocks[newNode.Identifier] = newNode
 		}
 
 		lastRow = currentRow
