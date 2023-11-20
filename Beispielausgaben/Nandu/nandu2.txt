@@ -1,0 +1,20 @@
+Q1: false
+Q2: false
+L1: false
+L2: true
+
+Q1: true
+Q2: false
+L1: false
+L2: true
+
+Q1: false
+Q2: true
+L1: false
+L2: true
+
+Q1: true
+Q2: true
+L1: true
+L2: false
+
