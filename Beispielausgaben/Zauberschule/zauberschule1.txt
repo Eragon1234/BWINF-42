@@ -1,0 +1,7 @@
+Weg als Liste, Start nicht inkludiert:
+{Floor:0 X:12 Y:7}
+{Floor:0 X:11 Y:7}
+{Floor:0 X:11 Y:6}
+{Floor:0 X:11 Y:5}
+
+Der kürzeste Weg braucht 4 Sekunden.
