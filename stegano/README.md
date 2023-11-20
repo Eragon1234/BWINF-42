@@ -32,4 +32,121 @@ Nach der Schleife wird der StringBuilder in einen String umgewandelt und ausgege
 
 ## Beispiele
 
+```shell
+$ stegano Beispieleingaben/StEgano/bild01/bild01.png
+Hallo Welt
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild02/bild02.png
+Hallo Gloria
+
+Wie treffen uns am Freitag um 15:00 Uhr vor der Eisdiele am Markplatz.
+
+Alle Liebe,
+Juliane
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild03/bild03.png
+Hallo Juliane,
+
+Super, ich werde da sein! Ich freue mich schon auf den riesen Eisbecher mit Erdbeeren. 
+
+Bis bald,
+Gloria
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild04/bild04.png
+Der Jugendwettbewerb Informatik ist ein Programmierwettbewerb für alle, die erste Programmiererfahrungen sammeln und vertiefen möchten. Programmiert wird mit Blockly, einer Bausteinorientierten Programmiersprache. Vorkenntnisse sind nicht nötig. Um sich mit den Aufgaben des Wettbewerbs vertraut zu machen, empfehlen wir unsere Trainingsseite . Er richtet sich an Schülerinnen und Schüler der Jahrgangsstufen 5 - 13, prinzipiell ist aber eine Teilnahme ab Jahrgangsstufe 3 möglich. Der Wettbewerb besteht aus drei Runden. Die ersten beiden Runden erfolgen online. In der 3. Runde werden zwei Aufgaben gestellt, diese gilt es mit eigenen Programmierwerkzeugen zuhause zu bearbeiten.
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild05/bild05.png
+Der Bundeswettbewerb Informatik richtet sich an Jugendliche bis 21 Jahre, vor dem Studium oder einer Berufstätigkeit. Der Wettbewerb beginnt am 1. September, dauert etwa ein Jahr und besteht aus drei Runden. Dabei können die Aufgaben der 1. Runde ohne größere Informatikkenntnisse gelöst werden; die Aufgaben der 2. Runde sind deutlich schwieriger.
+
+Der Bundeswettbewerb ist fachlich so anspruchsvoll, dass die Gewinner i.d.R. in die Studienstiftung des deutschen Volkes aufgenommen werden. Aus den Besten werden die TeilnehmerInnen für die Internationale Informatik-Olympiade ermittelt. Der Bundeswettbewerb ermöglicht den Teilnehmenden, ihr Wissen zu vertiefen und ihre Begabung weiterzuentwickeln. So trägt der Wettbewerb dazu bei, Jugendliche mit besonderem fachlichen Potenzial zu erkennen.
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild06/bild06.png
+Bonn
+
+Die Bundesstadt Bonn (im Latein der Humanisten Bonna) ist eine kreisfreie Großstadt im Regierungsbezirk Köln im Süden des Landes Nordrhein-Westfalen und Zweitregierungssitz der Bundesrepublik Deutschland. Mit 336.465 Einwohnern (31. Dezember 2022) zählt Bonn zu den zwanzig größten Städten Deut[...]wa 30 Mitarbeitern in Bonn.
+
+Arbeitsmarktbehörden
+Bonn ist außerdem Standort der Zentralen Auslands- und Fachvermittlung (ZAV) der Bundesagentur für Arbeit (BA). Im Stadtteil Duisdorf befindet sich der Hauptsitz der ZAV mit ihren bundesweit 18 Standorten.
+
+Quelle: https://de.wikipedia.org/wiki/Bonn
+```
+
+```shell
+$ stegano Beispieleingaben/StEgano/bild07/bild07.png
+Es hatte ein Mann einen Esel, der schon lange Jahre die Säcke unverdrossen zur Mühle getragen hatte, dessen Kräfte aber nun zu Ende giengen, so daß er zur Arbeit immer untauglicher ward. Da dachte der Herr daran, ihn aus dem Futter zu schaffen, aber der Esel merkte daß kein guter Wind wehte, lief fo[...]zt der Richter, der rief bringt mir den Schelm her. Da machte ich daß ich fortkam." Von nun an getrauten sich die Räuber nicht weiter in das Haus, den vier Bremer Musikanten gefiels aber so wohl darin, daß sie nicht wieder heraus wollten. Und der das zuletzt erzählt hat, dem ist der Mund noch warm.
+```
+
 ## Quellcode
+```go
+package main
+
+import (
+	"fmt"
+	"image"
+	"os"
+	"strings"
+
+	_ "image/jpeg"
+	_ "image/png"
+)
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: stegano <filepath>")
+		return
+	}
+
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file)
+
+	img, _, err := image.Decode(file)
+	if err != nil {
+		panic(err)
+	}
+
+	var sb strings.Builder
+	bounds := img.Bounds()
+	var x, y int
+
+	for {
+		r, g, b := GetRGB(img, x, y)
+
+		x += int(g)
+		y += int(b)
+
+		x %= bounds.Max.X
+		y %= bounds.Max.Y
+
+		sb.WriteRune(rune(r))
+
+		if g == 0 && b == 0 {
+			break
+		}
+	}
+
+	fmt.Println(sb.String())
+}
+
+func GetRGB(img image.Image, x, y int) (r, g, b uint32) {
+	r, g, b, _ = img.At(x, y).RGBA()
+	return r >> 8, g >> 8, b >> 8
+}
+```
