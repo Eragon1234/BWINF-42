@@ -5,17 +5,26 @@ import (
 	"BWINF/zauberschule/path"
 	"BWINF/zauberschule/plan"
 	"BWINF/zauberschule/route"
+	"flag"
 	"fmt"
 	"os"
 )
 
+var noRoute bool
+
+func init() {
+	flag.BoolVar(&noRoute, "no-route", false, "Don't print the route")
+	flag.Parse()
+}
+
 func main() {
-	if len(os.Args) < 2 {
+	args := flag.Args()
+	if len(args) == 0 {
 		fmt.Println("Usage: zauberschule <filepath>")
 		return
 	}
 
-	file, err := os.Open(os.Args[1])
+	file, err := os.Open(args[0])
 	if err != nil {
 		panic(err)
 	}
@@ -33,13 +42,15 @@ func main() {
 
 	shortestPath, distance := path.FindPath(p)
 
-	fmt.Println(route.StringFloorplanWithPath(*p, *shortestPath))
-	fmt.Println("Legende:")
-	fmt.Println("Der Startpunkt ist", ansi.S("unterstrichen.", ansi.Underline))
-	fmt.Println("Der Endpunkt ist X.")
-	fmt.Println("Stockwerkwechsel sind farbkodiert.")
-	fmt.Println("Bewegungen sind mit Pfeilen dargestellt.")
-	fmt.Println()
+	if !noRoute {
+		fmt.Println(route.StringFloorplanWithPath(*p, *shortestPath))
+		fmt.Println("Legende:")
+		fmt.Println("Der Startpunkt ist", ansi.S("unterstrichen.", ansi.Underline))
+		fmt.Println("Der Endpunkt ist X.")
+		fmt.Println("Stockwerkwechsel sind farbkodiert.")
+		fmt.Println("Bewegungen sind mit Pfeilen dargestellt.")
+		fmt.Println()
+	}
 
 	fmt.Println("Weg als Liste, Start nicht inkludiert:")
 	for _, step := range *shortestPath {
